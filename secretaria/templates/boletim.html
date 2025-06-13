@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Boletim de {{ aluno.aluno_name_complete }}</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <h1>Boletim de {{ aluno.aluno_name_complete }}</h1>
+    <a href="{% url 'aluno_detalhe' aluno.id %}">Voltar para detalhes do aluno</a>
+    <br>
+    <a href="{% url 'boletim_pdf' aluno.id %}" target="_blank" style="font-weight:bold; color:green;">Baixar PDF do Boletim</a>
+    <hr>
+    <h2>Notas por Matéria</h2>
+    <table border="1" cellpadding="6" cellspacing="0">
+        <thead>
+            <tr>
+                <th>Disciplina</th>
+                <th>Notas</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% comment %} Lista de matérias básicas {% endcomment %}
+            {% for materia in "Português,Matemática,História,Geografia,Ciências,Inglês,Educação Física,Artes".split(',') %}
+                <tr>
+                    <td>{{ materia }}</td>
+                    <td>
+                        {% if boletim and boletim.materia %}
+                            {% for nota in boletim.materia %}
+                                Nota: {{ nota.valor }} - Data: {{ nota.data|date:"d/m/Y" }}<br>
+                            {% endfor %}
+                        {% elif boletim and boletim[materia] %}
+                            {% for nota in boletim[materia] %}
+                                Nota: {{ nota.valor }} - Data: {{ nota.data|date:"d/m/Y" }}<br>
+                            {% endfor %}
+                        {% else %}
+                            Sem nota
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% if boletim %}
+        {% comment %} Exibe outras disciplinas que não estão na lista básica {% endcomment %}
+        {% for disciplina, notas in boletim.items %}
+            {% if disciplina not in "Português,Matemática,História,Geografia,Ciências,Inglês,Educação Física,Artes".split(',') %}
+                <h3>{{ disciplina }}</h3>
+                <ul>
+                    {% for nota in notas %}
+                        <li>Nota: {{ nota.valor }} - Data: {{ nota.data|date:"d/m/Y" }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        <p>Não há notas cadastradas para este aluno.</p>
+    {% endif %}
+    <hr>
+    <h2>Gráfico de Desempenho do Aluno</h2>
+    <canvas id="graficoAluno" width="400" height="200"></canvas>
+    <h2>Gráfico de Desempenho por Matéria</h2>
+    <canvas id="graficoMateria" width="400" height="200"></canvas>
+    <h2>Gráfico de Desempenho da Turma</h2>
+    <canvas id="graficoTurma" width="400" height="200"></canvas>
+    <script>
+        // Dados do aluno
+        const labels = [];
+        const notas = [];
+        {% for disciplina, notas_disciplina in boletim.items %}
+            labels.push("{{ disciplina }}");
+            let soma = 0;
+            let count = 0;
+            {% for nota in notas_disciplina %}
+                soma += Number("{{ nota.valor }}");
+                count++;
+            {% endfor %}
+            notas.push(count > 0 ? soma / count : 0);
+        {% endfor %}
+
+        // Gráfico de desempenho do aluno
+        new Chart(document.getElementById('graficoAluno'), {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Média por Matéria',
+                    data: notas,

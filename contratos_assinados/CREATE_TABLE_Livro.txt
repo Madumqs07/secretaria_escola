@@ -1,0 +1,111 @@
+CREATE TABLE Livro 
+( 
+ idLivro INT PRIMARY KEY,  
+ isbn VARCHAR(n),  
+ data_lancamento DATE,  
+ preco FLOAT,  
+ resumo VARCHAR(n),  
+); 
+
+CREATE TABLE Cliente 
+( 
+ idCliente INT PRIMARY KEY,  
+ nome_cliente VARCHAR(n),  
+); 
+
+CREATE TABLE Cidade
+( 
+ idCidade INT PRIMARY KEY,  
+ nome_estado VARCHAR(n),  
+); 
+
+CREATE TABLE Estado 
+( 
+ idEstado INT PRIMARY KEY,  
+ nome_estado VARCHAR(n),  
+); 
+
+CREATE TABLE Endereco 
+( 
+ idEndereco INT PRIMARY KEY,  
+ cep INT,  
+ numero INT,  
+ logradouro VARCHAR(n),  
+); 
+
+CREATE TABLE Venda 
+( 
+ idVenda INT PRIMARY KEY,  
+); 
+
+CREATE TABLE Autor 
+( 
+ idAutor INT PRIMARY KEY,  
+ nome_autor VARCHAR(n),  
+); 
+
+CREATE TABLE Categoria 
+( 
+ idCategoria INT PRIMARY KEY,  
+ nome VARCHAR(n),  
+ valor FLOAT,  
+ frete FLOAT,  
+ quantidade INT,  
+); 
+
+CREATE TABLE tem 
+( 
+ idAutor INT PRIMARY KEY,  
+ idLivro INT PRIMARY KEY,  
+); 
+
+CREATE TABLE tem1 
+( 
+ idCategoria INT PRIMARY KEY,  
+ idLivro INT PRIMARY KEY,  
+); 
+
+CREATE TABLE possui 
+( 
+ idVenda INT PRIMARY KEY,  
+ idLivro INT PRIMARY KEY,  
+); 
+
+CREATE TABLE possui1 
+( 
+ idVenda INT PRIMARY KEY,  
+ idCliente INT PRIMARY KEY,  
+); 
+
+CREATE TABLE possui11 
+( 
+ idEndereco INT PRIMARY KEY,  
+ idCliente INT PRIMARY KEY,  
+); 
+
+CREATE TABLE esta 
+( 
+ idCidade INT PRIMARY KEY,  
+ idEndereco INT PRIMARY KEY,  
+); 
+
+CREATE TABLE esta1 
+( 
+ idEstado INT PRIMARY KEY,  
+ idCidade INT PRIMARY KEY,  
+); 
+
+ALTER TABLE tem ADD FOREIGN KEY(idAutor) REFERENCES Autor (idAutor)
+ALTER TABLE tem ADD FOREIGN KEY(idLivro) REFERENCES Livro (idLivro)
+ALTER TABLE tem1 ADD FOREIGN KEY(idCategoria) REFERENCES Categoria (idCategoria)
+ALTER TABLE tem1 ADD FOREIGN KEY(idLivro) REFERENCES Livro (idLivro)
+ALTER TABLE possui ADD FOREIGN KEY(idVenda) REFERENCES Venda (idVenda)
+ALTER TABLE possui ADD FOREIGN KEY(idLivro) REFERENCES Livro (idLivro)
+ALTER TABLE possui1 ADD FOREIGN KEY(idVenda) REFERENCES Venda (idVenda)
+ALTER TABLE possui1 ADD FOREIGN KEY(idCliente) REFERENCES Cliente (idCliente)
+ALTER TABLE possui11 ADD FOREIGN KEY(idEndereco) REFERENCES Endereco (idEndereco)
+ALTER TABLE possui11 ADD FOREIGN KEY(idCliente) REFERENCES Cliente (idCliente)
+ALTER TABLE esta ADD FOREIGN KEY(idCidade) REFERENCES Cidade (idCidade)
+ALTER TABLE esta ADD FOREIGN KEY(idEndereco) REFERENCES Endereco (idEndereco)
+ALTER TABLE esta1 ADD FOREIGN KEY(idEstado) REFERENCES Estado (idEstado)
+ALTER TABLE esta1 ADD FOREIGN KEY(idCidade) REFERENCES Cidade (idCidade)

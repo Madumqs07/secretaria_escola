@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Gerar Contrato</h2>
+<form id="form-contrato" method="get">
+    <label for="aluno-select">Selecione o aluno:</label>
+    <select id="aluno-select" name="aluno_id" required>
+        <option value="">-- Escolha um aluno --</option>
+        {% for aluno in alunos %}
+            <option value="{{ aluno.id }}" {% if aluno.id|stringformat:"s" == aluno_id %}selected{% endif %}>{{ aluno.aluno_name_complete }}</option>
+        {% endfor %}
+    </select>
+    <label for="responsavel-select" style="margin-left:20px;">Selecione o responsável:</label>
+    <select id="responsavel-select" name="responsavel_id" required>
+        <option value="">-- Escolha um responsável --</option>
+        {% for responsavel in responsaveis %}
+            <option value="{{ responsavel.id }}" {% if responsavel.id|stringformat:"s" == responsavel_id %}selected{% endif %}>{{ responsavel.complete_name }}</option>
+        {% endfor %}
+    </select>
+    <button type="submit" style="margin-left:20px; font-weight:bold;">Gerar Contrato</button>
+</form>
+{% if contrato_url %}
+    <div style="margin-top:20px;">
+        <h3>Contrato Gerado</h3>
+        <a href="{{ contrato_url }}" target="_blank" style="font-weight:bold; color:#007bff;">Abrir Contrato em PDF</a>
+        <iframe src="{{ contrato_url }}" width="100%" height="600px" style="border:1px solid #ccc; margin-top:10px;"></iframe>
+    </div>
+{% endif %}
+<script>
+    // Submete o formulário ao trocar aluno ou responsável
+    document.getElementById('aluno-select').addEventListener('change', function() {
+        this.form.submit();
+    });
+    document.getElementById('responsavel-select').addEventListener('change', function() {
+        this.form.submit();
+    });
+</script>
+{% endblock %}

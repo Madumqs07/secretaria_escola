@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Adicionar Nota</title>
+</head>
+<body>
+    <!-- Título principal com o nome do aluno -->
+    <h1>Adicionar Nota para {{ aluno.aluno_name_complete }}</h1>
+    <!-- Formulário para adicionar uma nova nota -->
+    <form method="post">
+        {% csrf_token %} <!-- Proteção contra CSRF -->
+        <label for="disciplina">Disciplina:</label>
+        <!-- Dropdown para selecionar a disciplina -->
+        <select name="disciplina" id="disciplina" required>
+            {% for disciplina in disciplinas %}
+                <option value="{{ disciplina.id }}">{{ disciplina.nome }}</option>
+            {% endfor %}
+        </select><br><br>
+        <label for="valor">Nota:</label>
+        <!-- Campo para digitar a nota (de 0 a 10) -->
+        <input type="number" step="0.01" name="valor" id="valor" min="0" max="10" required><br><br>
+        <button type="submit">Salvar Nota</button>
+    </form>
+    <!-- Link para visualizar o boletim do aluno -->
+    <a href="{% url 'ver_boletim' aluno.id %}">Ver Boletim</a>
+    <hr>
+    <!-- Lista das matérias básicas da escola -->
+    <h2>Matérias Básicas da Escola</h2>
+    <ul>
+        <li>Português</li>
+        <li>Matemática</li>
+        <li>História</li>
+        <li>Geografia</li>
+        <li>Ciências</li>
+        <li>Inglês</li>
+        <li>Educação Física</li>
+        <li>Artes</li>
+    </ul>
+    <!-- Tabela com as notas do aluno por matéria -->
+    <h2>Notas do Aluno por Matéria</h2>
+    <table border="1" cellpadding="6" cellspacing="0">
+        <thead>
+            <tr>
+                <th>Disciplina</th>
+                <th>Nota</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for nota in aluno.notas.all %}
+                <tr>
+                    <td>{{ nota.disciplina.nome }}</td>
+                    <td>{{ nota.valor }}</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="2">Nenhuma nota cadastrada.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

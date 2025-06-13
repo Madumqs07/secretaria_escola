@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalhes do Aluno</title>
+</head>
+<body>
+    <!-- Título principal da página -->
+    <h1>Detalhes do Aluno</h1>
+    <!-- Links de ações rápidas: gerar contrato, abrir boletim em PDF -->
+    <div style="margin-bottom: 20px;">
+        <a href="{% url 'gerar_contrato_pdf' aluno.id %}" target="_blank" style="font-size:18px; font-weight:bold; color:#007bff; margin-right: 20px;">Gerar Contrato</a>
+        <a href="{% url 'boletim_pdf' aluno.id %}" target="_blank" style="font-size:18px; font-weight:bold; color:purple;">Abrir PDF do Boletim</a>
+    </div>
+    <!-- Dados principais do aluno -->
+    <p><strong>Nome:</strong> {{ aluno.aluno_name_complete }}</p>
+    <p><strong>CPF:</strong> {{ aluno.cpf_aluno }}</p>
+    <p><strong>Data de Nascimento:</strong> {{ aluno.birthday_aluno }}</p>
+    <p><strong>Email:</strong> {{ aluno.email_aluno }}</p>
+    <p><strong>Telefone:</strong> {{ aluno.phone_number_aluno }}</p>
+    <p><strong>Turma:</strong> {{ aluno.class_choices }}</p>
+    <p><strong>Responsável:</strong> {{ aluno.responsavel.complete_name }}</p>
+    <hr>
+    <!-- Seção do boletim escolar -->
+    <h2>Boletim Escolar</h2>
+    <p>Veja todas as notas do aluno organizadas por disciplina:</p>
+    <!-- Links para inserir nota, ver boletim completo e baixar PDFs -->
+    <a href="{% url 'adicionar_nota' aluno.id %}" style="font-size:18px; font-weight:bold; color:green;">Inserir Nota</a>
+    <br><br>
+    <a href="{% url 'ver_boletim' aluno.id %}" style="font-size:18px; font-weight:bold; color:blue;">Ver Boletim Completo</a>
+    <br><br>
+    <a href="{% url 'boletim_pdf' aluno.id %}" target="_blank" style="font-size:18px; font-weight:bold; color:purple;">Baixar PDF do Boletim</a>
+    <br><br>
+    <a href="{% url 'boletins_pdf_todos' %}" target="_blank" style="font-size:18px; font-weight:bold; color:orange;">Baixar PDF de Todos os Boletins</a>
+    <br><br>
+    <!-- Tabela de notas do aluno -->
+    {% if aluno.notas.exists %}
+        <h3>Resumo das Notas:</h3>
+        <table border="1" cellpadding="6" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>Disciplina</th>
+                    <th>Nota</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for nota in aluno.notas.all %}
+                    <tr>
+                        <td>{{ nota.disciplina.nome }}</td>
+                        <td>{{ nota.valor }}</td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="2">Nenhuma nota cadastrada.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>O aluno ainda não possui notas cadastradas.</p>
+    {% endif %}
+    <hr>
+    <!-- Formulário para inserir nova nota diretamente na página de detalhes -->
+    <h2>Inserir Nota</h2>
+    <form method="post" action="">
+        {% csrf_token %} <!-- Proteção contra CSRF -->
+        <label for="disciplina">Disciplina:</label>
+        <select name="disciplina" id="disciplina" required>
+            {% for disciplina in disciplinas %}
+                <option value="{{ disciplina.id }}">{{ disciplina.nome }}</option>
+            {% endfor %}
+        </select><br><br>
+        <label for="valor">Nota:</label>
+        <input type="number" step="0.01" name="valor" id="valor" required><br><br>
+        <button type="submit">Salvar Nota</button>
+    </form>
+    <br>
+    <!-- Visualização do boletim em PDF diretamente na página -->
+    <iframe src="{% url 'boletim_pdf' aluno.id %}" width="100%" height="600px" style="border:1px solid #888; margin-bottom:20px;"></iframe>
+</body>
+</html>

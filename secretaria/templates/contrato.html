@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Contrato Escolar</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 30px;
+        }
+    
+        h1, h2 {
+            text-align: center;
+        }
+    
+        p {
+            text-align: justify;
+            line-height: 1.4;
+        }
+    
+        .assinatura {
+            margin-top: 20px;
+            text-align: center;
+            page-break-inside: avoid;
+        }
+    
+        .assinatura div {
+            margin-top: 60px;
+            border-top: 1px solid #000;
+            width: 300px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
+    
+</head>
+<body>
+    <h1>Contrato de Responsabilidade Escolar</h1>
+    <h2>Dados do Aluno</h2>
+    <p><strong>Nome:</strong> {{ aluno.nome }}</p>
+    <p><strong>CPF:</strong> {{ aluno.cpf }}</p>
+    <p><strong>Data de Nascimento:</strong> {{ aluno.data_nascimento }}</p>
+    <p><strong>Email:</strong> {{ aluno.email }}</p>
+    <p><strong>Telefone:</strong> {{ aluno.telefone }}</p>
+    <h2>Dados do Responsável</h2>
+    <p><strong>Nome:</strong> {{ responsavel.nome }}</p>
+    <p><strong>CPF:</strong> {{ responsavel.cpf }}</p>
+    <p><strong>Data de Nascimento:</strong> {{ responsavel.data_nascimento }}</p>
+    <p><strong>Email:</strong> {{ responsavel.email }}</p>
+    <p><strong>Telefone:</strong> {{ responsavel.telefone }}</p>
+    <p><strong>Endereço:</strong> {{ responsavel.endereco }}</p>
+    <h2>Termo de Responsabilidade</h2>
+    <p>
+        Eu, {{ responsavel.nome }}, responsável legal pelo aluno {{ aluno.nome }}, declaro estar ciente de todas as
+        normas e obrigações da instituição de ensino, comprometendo-me a acompanhar a vida escolar do aluno,
+        garantindo sua assiduidade, disciplina e cumprimento das atividades escolares.
+    </p>
+    <div class="assinatura">
+        <p>Assinatura do Responsável</p>
+        <div></div>
+    </div>
+</body>
+</html>
