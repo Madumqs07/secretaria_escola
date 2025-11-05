@@ -9,7 +9,7 @@ Clone e Crie um Ambiente Virtual:
 
 Bash
 
-git clone [LINK DO REPOSITÓRIO]
+git clone https://github.com/Madumqs07/secretaria_escola.git
 cd nome-do-projeto
 python -m venv venv
 source venv/bin/activate  # Ou .\venv\Scripts\activate no Windows
